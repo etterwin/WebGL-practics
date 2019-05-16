@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2d</title>
+
+    <!-- CSS -->
+    <link href="style.css" rel="stylesheet" />
+    <!-- end -->
+
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<script id="2d-vertex-shader" type="notjs">
+
+    // vec2 is similar to a vec4 but only has x and y
+
+    attribute vec4 a_position; // a_position look like {x: 0, y: 0}, default = 0, 0
+
+    uniform vec2 u_resolution;
+
+    void main() {
+
+        // convert the position from pixels to 0.0 to 1.0
+        vec2 zeroToOne = a_position.xy / u_resolution;
+
+        // convert from 0 -> 1 to 0 -> 2
+        vec2 zeroToTwo = zeroToOne * 2.0;
+
+        // convert from 0 -> 2 to -1 -> +1 (clipspace)
+        vec2 clipSpace = zeroToTwo - 1.0;
+
+        // gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1); // (0,0) bottom left
+        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1); // (0,0) top left
+    }
+
+</script>
+
+<script id="2d-fragment-shader" type="notjs">
+
+    precision mediump float;
+
+    void main() {
+        gl_FragColor = vec4(1, 0, 0.5, 1);
+    }
+
+</script>
+
+<script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+
+<!-- JS -->
+<script src="main.js" type="text/javascript"></script>
+<!-- end -->
+
+</body>
+</html>
